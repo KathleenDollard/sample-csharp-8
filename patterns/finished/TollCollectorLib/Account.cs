@@ -14,7 +14,7 @@ namespace TollCollectorLib
         {
             public readonly static IEnumerable<Account> SomeAccounts = new List<Account>
             {
-                new Account("BSF-846")
+                new Account("BSF-846-WA")
             };
 
             public Account(string license)
@@ -33,6 +33,32 @@ namespace TollCollectorLib
                 var account = Account.SomeAccounts.Where(a => a.License == license).SingleOrDefault();
                 return (account is null ? null : account); // because nullable didn't pick up SingleOrDefault yet.
             }
+
+    
+        }
+
+        public class Owner
+        {
+            public Owner(string state, string plate)
+            {
+                State = state;
+                Plate = plate;
+            }
+
+            public string State { get; }
+            public string Plate { get; }
+
+            internal static async Task<Owner> LookupOwnerAsync(string state, string plate)
+            {
+                await Task.Delay(300);
+                return new Owner(state, plate);
+            }
+
+            internal void SendBill(decimal finalToll)
+            {
+                // DoNothing for now();
+            }
         }
     }
+
 }

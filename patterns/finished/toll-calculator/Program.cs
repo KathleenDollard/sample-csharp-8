@@ -16,7 +16,7 @@ namespace TollCollectorLib
                 new Car { Passengers = 2 },
                 time: DateTime.Now,
                 inbound: true,
-                license: "BSF-846x");
+                license: "BSF-846X-WA");
         }
 
         private class Logger : ILogger
