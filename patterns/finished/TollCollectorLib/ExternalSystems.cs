@@ -28,6 +28,21 @@
         {
             public int Capacity { get; set; }
             public int Riders { get; set; }
+
+            public void Deconstruct(out int capacity, out int riders)
+            => (capacity, riders) = (Capacity, Riders);
+        }
+
+        public readonly struct Bicycle
+        {
+            public  Bicycle(int riders, int wheels)
+            {
+                Riders = riders;
+                Wheels = wheels;
+            }
+
+            public int Riders { get;   }
+            public  int Wheels { get;  }
         }
     }
 

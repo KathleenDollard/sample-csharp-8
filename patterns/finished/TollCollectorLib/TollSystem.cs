@@ -29,7 +29,7 @@ namespace TollCollectorLib
 
         public static async IAsyncEnumerable
                 <(object vehicle, DateTime time, bool inBound, string license)>
-                GetAsync()
+                GetVehiclesAsync()
         {
             while (true)
             {
@@ -43,14 +43,14 @@ namespace TollCollectorLib
         }
 
         public static async Task ChargeTollAsync(
-            Car car,
+            object vehicle,
             DateTime time,
             bool inbound,
             string license)
         {
             try
             {
-                var baseToll = TollCalculator.CalculateToll(car);
+                var baseToll = TollCalculator.CalculateToll(vehicle);
                 var peakPremium = TollCalculator.PeakTimePremium(time, inbound);
                 var toll = baseToll * peakPremium;
                 var account = await Account.LookupAccountAsync(license);
