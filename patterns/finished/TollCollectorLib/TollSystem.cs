@@ -42,12 +42,6 @@ namespace TollCollectorLib
             }
         }
 
-        private static async Task<Account> LookupAccountAsync(string license)
-        {
-            await Task.Delay(300);
-            return Account.SomeAccounts.Where(a => a.License == license).SingleOrDefault();
-        }
-
         public static async Task ChargeTollAsync(
             Car car,
             DateTime time,
@@ -59,7 +53,7 @@ namespace TollCollectorLib
                 var baseToll = TollCalculator.CalculateToll(car);
                 var peakPremium = TollCalculator.PeakTimePremium(time, inbound);
                 var toll = baseToll * peakPremium;
-                var account = await LookupAccountAsync(license);
+                var account = await Account.LookupAccountAsync(license);
                 account.Charge(toll);
                 s_logger.SendMessage("Charged: {license} {toll:C}");
             }
