@@ -28,6 +28,10 @@
                 null => throw new ArgumentNullException(nameof(vehicle))
             };
 
+
+-------------------------------------------------------------------------------------------
+
+
    public static decimal PeakTimePremium(DateTime timeOfToll, bool inbound) =>
         (IsWeekDay(timeOfToll), GetTimeBand(timeOfToll), inbound) switch
         {
@@ -37,3 +41,11 @@
             (true, TimeBand.EveningRush, false) => 2.0m,
             (_, _, _) => 1.0m,
         };
+
+-------------------------------------------------------------------------------------------------------
+
+
+                Car { Passengers: 0 } => 2.00m + 0.5m,
+                Car { Passengers: 1 } => 2.00m ,
+                Car { Passengers: 2 } => 2.00m - 0.5m,
+                Car _ => 2.00m - 1.0m,
