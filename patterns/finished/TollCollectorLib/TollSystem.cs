@@ -16,7 +16,7 @@ namespace TollCollectorLib
             = new ConcurrentQueue<(object, DateTime, bool, string)>();
         private static ILogger s_logger;
 
-        public static void Initialize(ILogger logger)
+        public static void Initialize(ILogger logger) 
         {
             s_logger = logger;
         }
