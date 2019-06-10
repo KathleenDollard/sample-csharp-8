@@ -27,7 +27,6 @@ namespace TollCollectorLib
 
         public static void AddEntry(object vehicle, DateTime time, bool inbound, string license)
         {
-            s_logger.SendMessage($"{time}: {(inbound ? "Inbound" : "Outbound")} {license} - {vehicle}");
             s_queue.Enqueue((vehicle, time, inbound, license));
         }
 
