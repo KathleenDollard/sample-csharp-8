@@ -1,12 +1,12 @@
 ﻿using Common;
 using System;
 using System.Threading.Tasks;
+using TollCollectorLib;
 using TollCollectorLib.CommercialRegistration;
 using TollCollectorLib.ConsumerVehicleRegistration;
 using TollCollectorLib.LiveryRegistration;
 
-namespace TollCollectorLib
-
+namespace TollCollectorConsole
 {
     class Program
     {
@@ -21,7 +21,7 @@ namespace TollCollectorLib
                 license: "BSF-846X-WA");
 
             //await MoreStuffAsync();
-       
+
         }
 
         private class Logger : ILogger
