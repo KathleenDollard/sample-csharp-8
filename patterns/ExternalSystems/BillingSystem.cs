@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace TollCollectorLib
 {
     namespace BillingSystem
@@ -26,11 +28,10 @@ namespace TollCollectorLib
             public static async Task<Account?> LookupAccountAsync(string license)
             {
                 await Task.Delay(300);
-                Account account = Account.SomeAccounts.Where(a => a.License == license).SingleOrDefault();
-                return account is null ? null : account; // because nullable didn't pick up SingleOrDefault yet.
+                Account account = SomeAccounts.Where(a => a.License == license).SingleOrDefault();
+                // temporary because nullable didn't pick up SingleOrDefault yet.
+                return account is null ? null : account; 
             }
-
-
         }
 
         public class Owner
