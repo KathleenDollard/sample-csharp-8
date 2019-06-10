@@ -28,9 +28,10 @@ namespace TollCollectorLib
             public static async Task<Account?> LookupAccountAsync(string license)
             {
                 await Task.Delay(300);
-                Account account = SomeAccounts.Where(a => a.License == license).SingleOrDefault();
-                // temporary because nullable didn't pick up SingleOrDefault yet.
-                return account is null ? null : account; 
+                Account? account = SomeAccounts.Where(a => a.License == license).SingleOrDefault() ?? null;
+                // the forced null above is temporary to force flow control 
+                // to understand null. SingleOrDefault is not yet annotated.
+                return account; 
             }
         }
 
@@ -45,13 +46,13 @@ namespace TollCollectorLib
             public string State { get; }
             public string Plate { get; }
 
-            internal static async Task<Owner> LookupOwnerAsync(string state, string plate)
+            public static async Task<Owner> LookupOwnerAsync(string state, string plate)
             {
                 await Task.Delay(300);
                 return new Owner(state, plate);
             }
 
-            internal void SendBill(decimal finalToll)
+            public void SendBill(decimal finalToll)
                 => // Dummy send Bill Action
                 Console.WriteLine($"Sending bill: {finalToll}");
         }
