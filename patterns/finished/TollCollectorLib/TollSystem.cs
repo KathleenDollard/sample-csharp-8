@@ -7,6 +7,7 @@ using TollCollectorLib.BillingSystem;
 using TollCollectorLib.ConsumerVehicleRegistration;
 using System.Linq;
 using System.Threading.Tasks;
+using Common;
 
 namespace TollCollectorLib
 {

@@ -1,4 +1,5 @@
-﻿namespace TollCollectorLib
+﻿namespace Common
+
 {
     public interface ILogger
     {

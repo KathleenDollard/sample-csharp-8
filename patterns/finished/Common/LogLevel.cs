@@ -1,4 +1,4 @@
-﻿namespace TollCollectorLib
+﻿namespace Common
 {
     public enum LogLevel
     {
