@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GreenRegistration
+﻿namespace GreenRegistration
 {
-    public readonly struct Bicycle
+    public readonly struct Cycle
     {
-        public Bicycle(int riders, int wheels)
+        public Cycle(int riders, int wheels)
         {
             Riders = riders;
             Wheels = wheels;
         }
+
+        public void Deconstruct(out int riders, out int wheels) =>
+                (riders, wheels) = (Riders, Wheels);
 
         public int Riders { get; }
         public int Wheels { get; }

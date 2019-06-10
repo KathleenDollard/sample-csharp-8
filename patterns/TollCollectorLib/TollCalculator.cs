@@ -8,6 +8,11 @@ namespace TollCollectorLib
 {
     public static class TollCalculator
     {
+        private const decimal carBase = 2.00m;
+        private const decimal taxiBase = 3.50m;
+        private const decimal busBase = 5.00m;
+        private const decimal deliveryTruckBase = 10.00m;
+
         public static decimal CalculateToll(object vehicle)
         {
             if (vehicle is null)
@@ -17,36 +22,36 @@ namespace TollCollectorLib
             switch (vehicle)
             {
                 case Car c when c.Passengers == 0:
-                    return 2.00m + 0.5m;
+                    return carBase + 0.5m;
                 case Car c when c.Passengers == 1:
-                    return 2.00m;
+                    return carBase;
                 case Car c when c.Passengers == 2:
-                    return 2.00m - 0.50m;
+                    return carBase - 0.50m;
                 case Car c:
-                    return 2.00m - 1.00m;
+                    return carBase - 1.00m;
 
                 case Taxi t when t.Fares == 0:
-                    return 3.50m + 1.0m;
+                    return taxiBase + 1.0m;
                 case Taxi t when t.Fares == 1:
-                    return 3.50m;
+                    return taxiBase;
                 case Taxi t when t.Fares == 2:
-                    return 3.50m - 0.50m;
+                    return taxiBase - 0.50m;
                 case Taxi t:
-                    return 3.50m - 1.00m;
+                    return taxiBase - 1.00m;
 
                 case Bus b when ((double)b.Riders / (double)b.Capacity) < 0.50:
-                    return 5.00m + 2.00m;
+                    return busBase + 2.00m;
                 case Bus b when ((double)b.Riders / (double)b.Capacity) > 0.90:
-                    return 5.00m - 1.00m;
+                    return busBase - 1.00m;
                 case Bus b:
-                    return 5.00m;
+                    return busBase;
 
                 case DeliveryTruck t when t.GrossWeightClass > 5000:
-                    return 10.00m + 5.00m;
+                    return deliveryTruckBase + 5.00m;
                 case DeliveryTruck t when t.GrossWeightClass < 3000:
-                    return 10.00m - 2.00m;
+                    return deliveryTruckBase - 2.00m;
                 case DeliveryTruck t:
-                    return 10.00m;
+                    return deliveryTruckBase;
 
                 default:
                     throw new ArgumentException(message: "Not a known vehicle type", paramName: nameof(vehicle));

@@ -67,6 +67,15 @@ namespace TollCollectorLib
             }
         }
 
+
+        //public static async Task ChargeTollsFromStreamAsync()
+        //{
+        //    foreach (var t in TollSystem.GetTollEventsAsync())
+        //    {
+        //        await TollSystem.ChargeTollAsync(t.vehicle, t.time, t.inBound, t.license);
+        //    }
+        //}   
+
     }
 
 

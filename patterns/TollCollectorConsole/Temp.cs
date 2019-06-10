@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace toll_calculator
+﻿namespace toll_calculator
 {
     class Temp
     {

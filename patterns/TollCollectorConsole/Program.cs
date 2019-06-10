@@ -1,6 +1,6 @@
 ﻿using Common;
+using GreenRegistration;
 using System;
-using System.Threading.Tasks;
 using TollCollectorLib;
 using TollCollectorLib.CommercialRegistration;
 using TollCollectorLib.ConsumerVehicleRegistration;
@@ -12,7 +12,8 @@ namespace TollCollectorConsole
     {
         static async System.Threading.Tasks.Task Main(string[] args)
         {
-            TollSystem.Initialize(new Logger());
+            var logger = new Logger();
+            TollSystem.Initialize(logger, true);
 
             await TollSystem.ChargeTollAsync(
                 new Car { Passengers = 2 },
@@ -20,8 +21,16 @@ namespace TollCollectorConsole
                 inbound: true,
                 license: "BSF-846-WA");
 
+            //DoTheGreenDemo();
+
             //await ChargeTollsFromStreamAsync();
 
+            //void DoTheGreenDemo()
+            //{
+            //    var cycle = new Cycle(riders: 1, 1);
+            //    var points = GreenPointSystem.GetPoints(cycle);
+            //    logger.SendMessage($"Green! {cycle.Riders}/{cycle.Wheels} Points: {points}", LogLevel.Info);
+            //}
         }
 
         private class Logger : ILogger
@@ -29,13 +38,5 @@ namespace TollCollectorConsole
             public void SendMessage(string message, LogLevel logLevel)
                 => Console.WriteLine(message);
         }
-
-        //private static async Task ChargeTollsFromStreamAsync()
-        //{
-        //    foreach (var t in TollSystem.GetTollEventsAsync())
-        //    {
-        //        await TollSystem.ChargeTollAsync(t.vehicle, t.time, t.inBound, t.license);
-        //    }
-        //}   
     }
 }
