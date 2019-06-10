@@ -23,7 +23,7 @@ namespace TollCollectorLib
                 => // Dummy charge action
                 Console.WriteLine($"Charging toll: {toll}");
 
-            public static async Task<Account> LookupAccountAsync(string license)
+            public static async Task<Account?> LookupAccountAsync(string license)
             {
                 await Task.Delay(300);
                 Account account = Account.SomeAccounts.Where(a => a.License == license).SingleOrDefault();
