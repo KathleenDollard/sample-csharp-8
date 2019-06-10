@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+namespace TollCollectorLib
+{
     namespace BillingSystem
     {
         public class Account
@@ -17,11 +19,11 @@ using System.Threading.Tasks;
 
             public string License { get; }
 
-            internal void Charge(decimal toll) 
+            public void Charge(decimal toll) 
                 => // Dummy charge action
                 Console.WriteLine($"Charging toll: {toll}");
 
-            internal static async Task<Account> LookupAccountAsync(string license)
+            public static async Task<Account> LookupAccountAsync(string license)
             {
                 await Task.Delay(300);
                 Account account = Account.SomeAccounts.Where(a => a.License == license).SingleOrDefault();
@@ -54,3 +56,4 @@ using System.Threading.Tasks;
         }
     }
 
+}
