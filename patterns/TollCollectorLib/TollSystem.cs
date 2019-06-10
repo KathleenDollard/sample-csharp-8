@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using TollCollectorLib.BillingSystem;
 using TollCollectorLib.ConsumerVehicleRegistration;
-using System.Linq;
-using System.Threading.Tasks;
 using Common;
 
 namespace TollCollectorLib
@@ -17,9 +13,16 @@ namespace TollCollectorLib
             = new ConcurrentQueue<(object, DateTime, bool, string)>();
         private static ILogger s_logger;
 
-        public static void Initialize(ILogger logger) 
+        public static void Initialize(ILogger logger, bool includeTestData = false) 
         {
             s_logger = logger;
+           if (includeTestData)
+            { 
+                TollSystem.AddEntry(new Car(), DateTime.Now, true, "AAA-BBB-CO");
+                TollSystem.AddEntry(new Car(), DateTime.Now, true, "BBB-CCC-AK");
+                TollSystem.AddEntry(new Car(), DateTime.Now, true, "CCC-DDD-WI");
+                TollSystem.AddEntry(new Car(), DateTime.Now, true, "DDD-EEE-WA");
+            }
         }
 
         public static void AddEntry(object vehicle, DateTime time, bool inbound, string license)
@@ -28,20 +31,20 @@ namespace TollCollectorLib
             s_queue.Enqueue((vehicle, time, inbound, license));
         }
 
-        public static async IAsyncEnumerable
-                <(object vehicle, DateTime time, bool inBound, string license)>
-                GetVehiclesAsync()
-        {
-            while (true)
-            {
-                if (s_queue.TryDequeue(out var entry))
-                {
-                    yield return entry;
-                }
+        //public static async IAsyncEnumerable
+        //        <(object vehicle, DateTime time, bool inBound, string license)>
+        //        GetTollEventsAsync()
+        //{
+        //    while (true)
+        //    {
+        //        if (s_queue.TryDequeue(out var entry))
+        //        {
+        //            yield return entry;
+        //        }
 
-                await Task.Delay(500);
-            }
-        }
+        //        await Task.Delay(500);
+        //    }
+        //}
 
         public static async Task ChargeTollAsync(
             object vehicle,
@@ -54,9 +57,9 @@ namespace TollCollectorLib
                 var baseToll = TollCalculator.CalculateToll(vehicle);
                 var peakPremium = TollCalculator.PeakTimePremium(time, inbound);
                 var toll = baseToll * peakPremium;
-                var account = await Account.LookupAccountAsync(license);
+                Account account = await Account.LookupAccountAsync(license);
                 account.Charge(toll);
-                s_logger.SendMessage("Charged: {license} {toll:C}");
+                s_logger.SendMessage($"Charged: {license} {toll:C}");
             }
             catch (Exception ex)
             {

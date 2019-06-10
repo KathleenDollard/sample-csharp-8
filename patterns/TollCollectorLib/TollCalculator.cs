@@ -41,9 +41,9 @@ namespace TollCollectorLib
                 case Bus b:
                     return 5.00m;
 
-                case DeliveryTruck t when (t.GrossWeightClass > 5000):
+                case DeliveryTruck t when t.GrossWeightClass > 5000:
                     return 10.00m + 5.00m;
-                case DeliveryTruck t when (t.GrossWeightClass < 3000):
+                case DeliveryTruck t when t.GrossWeightClass < 3000:
                     return 10.00m - 2.00m;
                 case DeliveryTruck t:
                     return 10.00m;
@@ -53,39 +53,53 @@ namespace TollCollectorLib
             };
         }
 
-        public static decimal PeakTimePremium(DateTime timeOfToll, bool inbound) =>
-            (IsWeekDay(timeOfToll), GetTimeBand(timeOfToll), inbound) switch
+        public static decimal PeakTimePremium(DateTime timeOfToll, bool inbound)
+        {
+            if (IsWeekDay(timeOfToll))
             {
-                (true, TimeBand.MorningRush, true) => 2.00m,
-                (true, TimeBand.MorningRush, false) => 1.00m,
-                (true, TimeBand.Daytime, true) => 1.50m,
-                (true, TimeBand.Daytime, false) => 1.50m,
-                (true, TimeBand.EveningRush, true) => 1.00m,
-                (true, TimeBand.EveningRush, false) => 2.00m,
-                (true, TimeBand.Overnight, true) => 0.75m,
-                (true, TimeBand.Overnight, false) => 0.75m,
-                (false, TimeBand.MorningRush, true) => 1.00m,
-                (false, TimeBand.MorningRush, false) => 1.00m,
-                (false, TimeBand.Daytime, true) => 1.00m,
-                (false, TimeBand.Daytime, false) => 1.00m,
-                (false, TimeBand.EveningRush, true) => 1.00m,
-                (false, TimeBand.EveningRush, false) => 1.00m,
-                (false, TimeBand.Overnight, true) => 1.00m,
-                (false, TimeBand.Overnight, false) => 1.00m,
-            };
+                if (GetTimeBand(timeOfToll) == TimeBand.MorningRush)
+                {
+                    return inbound ? 2.00m : 1.00m;
+                }
+                if (GetTimeBand(timeOfToll) == TimeBand.Daytime)
+                {
+                    return 1.50m;
+                }
+                if (GetTimeBand(timeOfToll) == TimeBand.EveningRush)
+                {
+                    return !inbound ? 2.00m : 1.00m;
+                }
+                if (GetTimeBand(timeOfToll) == TimeBand.Overnight)
+                {
+                    return 0.75m;
+                }
+            }
+            return 1.00m;
 
-        private static bool IsWeekDay(DateTime timeOfToll) =>
-            timeOfToll.DayOfWeek switch
+        }
+
+        private static bool IsWeekDay(DateTime timeOfToll)
+        {
+            switch (timeOfToll.DayOfWeek)
             {
-                DayOfWeek.Monday => true,
-                DayOfWeek.Tuesday => true,
-                DayOfWeek.Wednesday => true,
-                DayOfWeek.Thursday => true,
-                DayOfWeek.Friday => true,
-                DayOfWeek.Saturday => false,
-                DayOfWeek.Sunday => false,
-
+                case DayOfWeek.Monday:
+                    return true;
+                case DayOfWeek.Tuesday:
+                    return true;
+                case DayOfWeek.Wednesday:
+                    return true;
+                case DayOfWeek.Thursday:
+                    return true;
+                case DayOfWeek.Friday:
+                    return true;
+                case DayOfWeek.Saturday:
+                    return false;
+                case DayOfWeek.Sunday:
+                    return false;
+                default:
+                    return true;
             };
+        }
 
         private enum TimeBand
         {
@@ -97,17 +111,27 @@ namespace TollCollectorLib
 
         private static TimeBand GetTimeBand(DateTime timeOfToll)
         {
-            int hour = timeOfToll.Hour;
+            var hour = timeOfToll.Hour;
             if (hour < 6)
+            {
                 return TimeBand.Overnight;
+            }
             else if (hour < 10)
+            {
                 return TimeBand.MorningRush;
+            }
             else if (hour < 16)
+            {
                 return TimeBand.Daytime;
+            }
             else if (hour < 20)
+            {
                 return TimeBand.EveningRush;
+            }
             else
+            {
                 return TimeBand.Overnight;
+            }
         }
 
     }
