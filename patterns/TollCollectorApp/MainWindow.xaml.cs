@@ -119,10 +119,8 @@ namespace TollCollectorApp
             TollSystem.AddEntry(vehicle, GenerateTimeStamp(), inbound, GenerateLicense());
         }
 
-        private void btnNull_Click(object sender, RoutedEventArgs e)
-        {
-            TollSystem.AddEntry(null, DateTime.Now, false, null);
-        }
+        private void btnNull_Click(object sender, RoutedEventArgs e) 
+            => TollSystem.AddEntry(null, DateTime.Now, false, null);
 
         void ILogger.SendMessage(string message, LogLevel level)
         {
