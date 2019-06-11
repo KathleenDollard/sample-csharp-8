@@ -2,9 +2,9 @@
 using GreenRegistration;
 using System;
 using TollCollectorLib;
-using TollCollectorLib.CommercialRegistration;
-using TollCollectorLib.ConsumerVehicleRegistration;
-using TollCollectorLib.LiveryRegistration;
+using CommercialRegistration;
+using ConsumerVehicleRegistration;
+using LiveryRegistration;
 
 namespace TollCollectorConsole
 {
@@ -13,7 +13,7 @@ namespace TollCollectorConsole
         static async System.Threading.Tasks.Task Main(string[] args)
         {
             var logger = new Logger();
-            TollSystem.Initialize(logger, true);
+            TollSystem.Initialize(logger);
 
             await TollSystem.ChargeTollAsync(
                 new Car { Passengers = 2 },
@@ -23,7 +23,7 @@ namespace TollCollectorConsole
 
             //DoTheGreenDemo();
 
-            //await ChargeTollsFromStreamAsync();
+            //For the async demo, switch the startup project to TollCollectorApp
 
             //void DoTheGreenDemo()
             //{

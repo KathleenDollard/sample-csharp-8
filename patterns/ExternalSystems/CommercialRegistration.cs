@@ -1,12 +1,7 @@
-﻿namespace TollCollectorLib
+﻿namespace CommercialRegistration
 {
-
-    namespace CommercialRegistration
+    public class DeliveryTruck
     {
-        public class DeliveryTruck
-        {
-            public int GrossWeightClass { get; set; }
-        }
+        public int GrossWeightClass { get; set; }
     }
-
 }

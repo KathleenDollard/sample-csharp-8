@@ -1,7 +1,7 @@
 ﻿using System;
-using TollCollectorLib.CommercialRegistration;
-using TollCollectorLib.ConsumerVehicleRegistration;
-using TollCollectorLib.LiveryRegistration;
+using CommercialRegistration;
+using ConsumerVehicleRegistration;
+using LiveryRegistration;
 
 namespace TollCollectorLib
 

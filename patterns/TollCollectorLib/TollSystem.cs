@@ -2,8 +2,9 @@
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using TollCollectorLib.BillingSystem;
-using TollCollectorLib.ConsumerVehicleRegistration;
+using ConsumerVehicleRegistration;
 using Common;
+using System.Collections.Generic;
 
 namespace TollCollectorLib
 {
@@ -13,37 +14,29 @@ namespace TollCollectorLib
             = new ConcurrentQueue<(object, DateTime, bool, string)>();
         private static ILogger s_logger;
 
-        public static void Initialize(ILogger logger, bool includeTestData = false) 
-        {
-            s_logger = logger;
-           if (includeTestData)
-            { 
-                TollSystem.AddEntry(new Car(), DateTime.Now, true, "AAA-BBB-CO");
-                TollSystem.AddEntry(new Car(), DateTime.Now, true, "BBB-CCC-AK");
-                TollSystem.AddEntry(new Car(), DateTime.Now, true, "CCC-DDD-WI");
-                TollSystem.AddEntry(new Car(), DateTime.Now, true, "DDD-EEE-WA");
-            }
-        }
+        public static void Initialize(ILogger logger) 
+            => s_logger = logger;
 
         public static void AddEntry(object vehicle, DateTime time, bool inbound, string license)
         {
+            s_logger.SendMessage($"{time}: {(inbound ? "Inbound" : "Outbound")} {license} - {vehicle}");
             s_queue.Enqueue((vehicle, time, inbound, license));
         }
 
-        //public static async IAsyncEnumerable
-        //        <(object vehicle, DateTime time, bool inBound, string license)>
-        //        GetTollEventsAsync()
-        //{
-        //    while (true)
-        //    {
-        //        if (s_queue.TryDequeue(out var entry))
-        //        {
-        //            yield return entry;
-        //        }
+        public static async IAsyncEnumerable
+                <(object vehicle, DateTime time, bool inbound, string license)>
+                GetTollEventsAsync()
+        {
+            while (true)
+            {
+                if (s_queue.TryDequeue(out var entry))
+                {
+                    yield return entry;
+                }
 
-        //        await Task.Delay(500);
-        //    }
-        //}
+                await Task.Delay(500);
+            }
+        }
 
         public static async Task ChargeTollAsync(
             object vehicle,
@@ -65,18 +58,5 @@ namespace TollCollectorLib
                 s_logger.SendMessage(ex.Message, LogLevel.Error);
             }
         }
-
-
-        //public static async Task ChargeTollsFromStreamAsync()
-        //{
-        //    foreach (var t in TollSystem.GetTollEventsAsync())
-        //    {
-        //        await TollSystem.ChargeTollAsync(t.vehicle, t.time, t.inBound, t.license);
-        //    }
-        //}   
-
     }
-
-
-
 }
