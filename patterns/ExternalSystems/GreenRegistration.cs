@@ -1,6 +1,6 @@
 ﻿namespace GreenRegistration
 {
-    public readonly struct Cycle
+    public  struct Cycle
     {
         public Cycle(int riders, int wheels)
         {
@@ -12,6 +12,6 @@
                 (riders, wheels) = (Riders, Wheels);
 
         public int Riders { get; }
-        public int Wheels { get; }
+        public readonly int Wheels { get; }
     }
 }

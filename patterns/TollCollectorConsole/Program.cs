@@ -19,18 +19,16 @@ namespace TollCollectorConsole
                 new Car { Passengers = 2 },
                 time: DateTime.Now,
                 inbound: true,
-                license: "BSF-846-WA");
+                license: "BSF-846x-WA");
 
-            //DoTheGreenDemo();
+            DoTheGreenDemo(logger);
 
-            //For the async demo, switch the startup project to TollCollectorApp
-
-            //void DoTheGreenDemo()
-            //{
-            //    var cycle = new Cycle(riders: 1, 1);
-            //    var points = GreenPointSystem.GetPoints(cycle);
-            //    logger.SendMessage($"Green! {cycle.Riders}/{cycle.Wheels} Points: {points}", LogLevel.Info);
-            //}
+            static void DoTheGreenDemo(ILogger logger)
+            {
+                var cycle = new Cycle(riders: 1, 1);
+                var points = GreenPointSystem.GetPoints(cycle);
+                logger.SendMessage($"Green! {cycle.Riders}/{cycle.Wheels} Points: {points}", LogLevel.Info);
+            }
         }
 
         private class Logger : ILogger
