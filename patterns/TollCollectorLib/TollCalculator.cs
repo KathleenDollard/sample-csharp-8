@@ -39,9 +39,9 @@ namespace TollCollectorLib
                 case Taxi t:
                     return taxiBase - 1.00m;
 
-                case Bus b when ((double)b.Riders / (double)b.Capacity) < 0.50:
+                case Bus b when ((double)b.Riders / b.Capacity) < 0.50:
                     return busBase + 2.00m;
-                case Bus b when ((double)b.Riders / (double)b.Capacity) > 0.90:
+                case Bus b when ((double)b.Riders / b.Capacity) > 0.90:
                     return busBase - 1.00m;
                 case Bus b:
                     return busBase;

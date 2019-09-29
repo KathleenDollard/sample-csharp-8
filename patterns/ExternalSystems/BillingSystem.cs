@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-#nullable enable
-
 namespace TollCollectorLib
 {
     namespace BillingSystem
@@ -25,12 +23,15 @@ namespace TollCollectorLib
                 => // Dummy charge action
                 Console.WriteLine($"Charging toll: {toll}");
 
-            public static async Task<Account?> LookupAccountAsync(string license)
+            public static async Task<Account> LookupAccountAsync(string license)
             {
                 await Task.Delay(300);
-                Account? account = SomeAccounts.Where(a => a.License == license).SingleOrDefault() ?? null;
-                // the forced null above is temporary to force flow control 
-                // to understand null. SingleOrDefault is not yet annotated.
+                Account account = SomeAccounts
+                                      .Where(a => a.License == license)
+                                      .SingleOrDefault() 
+                                      ?? null;
+                // Hack above is to force the possibility of null. 
+                // SingleOrDefault seems oblivious
                 return account; 
             }
         }

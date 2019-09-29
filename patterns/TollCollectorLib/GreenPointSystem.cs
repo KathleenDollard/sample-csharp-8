@@ -10,8 +10,8 @@ namespace TollCollectorLib
         //public static int GetPoints(Cycle cycle)
         //   => cycle switch
         //   {
-        //       (1, 1) => 500,
-        //       (2, 2) => 400,
+        //       (_, 1) => 500, // We love unicycles, no matter how many riders
+        //       var (Riders, Wheels) when Wheels/Riders > 1 => 200, 
         //       _ => 300
         //   }
     }
