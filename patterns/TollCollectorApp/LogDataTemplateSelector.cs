@@ -6,24 +6,20 @@ namespace TollCollectorApp
 {
     internal class LogDataTemplateSelector : DataTemplateSelector
     {
-        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        public override DataTemplate? SelectTemplate(object item,
+            DependencyObject container)
         {
-            var element = container as FrameworkElement;
-            if (element == null)
+            if (!(container is FrameworkElement element))
             {
                 return null;
             }
 
-            if (item is LogItem)
+            return item switch
             {
-                return element.FindResource("LogItemTemplate") as DataTemplate;
-            }
-            else if (item is Exception)
-            {
-                return element.FindResource("ExceptionTemplate") as DataTemplate;
-            }
-
-            return null;
+                LogItem _ => element.FindResource("LogItemTemplate") as DataTemplate,
+                Exception _ => element.FindResource("ExceptionTemplate") as DataTemplate,
+                _ => throw new Exception()
+            };
         }
     }
 }

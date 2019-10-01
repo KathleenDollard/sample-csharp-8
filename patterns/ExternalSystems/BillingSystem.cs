@@ -23,10 +23,10 @@ namespace TollCollectorLib
                 => // Dummy charge action
                 Console.WriteLine($"Charging toll: {toll}");
 
-            public static async Task<Account> LookupAccountAsync(string license)
+            public static async Task<Account?> LookupAccountAsync(string license)
             {
                 await Task.Delay(300);
-                Account account = SomeAccounts
+                Account? account = SomeAccounts
                                       .Where(a => a.License == license)
                                       .SingleOrDefault() 
                                       ?? null;
@@ -38,11 +38,8 @@ namespace TollCollectorLib
 
         public class Owner
         {
-            public Owner(string state, string plate)
-            {
-                State = state;
-                Plate = plate;
-            }
+            public Owner(string state, string plate) 
+                => (State, Plate) = (state, plate);
 
             public string State { get; }
             public string Plate { get; }

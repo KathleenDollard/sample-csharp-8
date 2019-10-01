@@ -23,7 +23,17 @@ namespace TollCollectorApp
 
             _random = new Random();
             TollSystem.Initialize(this);
+            _ = ChargeTollAsync();
         }
+
+        private static async Task ChargeTollAsync()
+        {
+            await foreach (var t in TollSystem.GetTollEventsAsync())
+            {
+                await TollSystem.ChargeTollAsync(t.vehicle, t.time, t.inbound, t.license);
+            }
+        }
+
 
         private string GenerateLicense()
         {
@@ -119,8 +129,9 @@ namespace TollCollectorApp
             TollSystem.AddEntry(vehicle, GenerateTimeStamp(), inbound, GenerateLicense());
         }
 
-        private void btnNull_Click(object sender, RoutedEventArgs e) 
-            => TollSystem.AddEntry(null, DateTime.Now, false, null);
+        private void btnNull_Click(object sender, RoutedEventArgs e)
+        { }
+       // => TollSystem.AddEntry(null, DateTime.Now, false, null);
 
         void ILogger.SendMessage(string message, LogLevel level)
         {
