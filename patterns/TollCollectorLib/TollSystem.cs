@@ -46,13 +46,26 @@ namespace TollCollectorLib
             try
             {
                 var toll = CalculateAccountToll(vehicle, time, inbound);
-                Account account = await Account.LookupAccountAsync(license);
-                account.Charge(toll);
-                s_logger?.SendMessage($"Charged: {license} {toll:C}");
+                Account? account = await Account.LookupAccountAsync(license);
+                if (account is { })
+                {
+                    account.Charge(toll);
+                    s_logger.SendMessage($"Charged: {license} {toll:C}");
+                }
+                else
+                {
+
+                    var state = license[^2..];
+                    var plate = license[..^3];
+                    var owner = Owner.LookupOwnerAsync(state, plate);
+                    var finalToll = toll + 2.00m;
+                    s_logger.SendMessage($"Send bill: {license} {finalToll:C}");
+                }
+
             }
             catch (Exception ex)
             {
-                s_logger?.SendMessage(ex.Message, LogLevel.Error);
+                s_logger.SendMessage(ex.Message, LogLevel.Error);
             }
 
             static decimal CalculateAccountToll(object vehicle, DateTime time, bool inbound)
