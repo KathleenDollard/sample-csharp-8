@@ -12,14 +12,14 @@ namespace TollCollectorLib
     {
         private static readonly ConcurrentQueue<(object, DateTime, bool, string)> s_queue
             = new ConcurrentQueue<(object, DateTime, bool, string)>();
-        private static ILogger s_logger;
+        private static ILogger? s_logger;
 
         public static void Initialize(ILogger logger) 
             => s_logger = logger;
 
         public static void AddEntry(object vehicle, DateTime time, bool inbound, string license)
         {
-            s_logger.SendMessage($"{time}: {(inbound ? "Inbound" : "Outbound")} {license} - {vehicle}");
+            s_logger?.SendMessage($"{time}: {(inbound ? "Inbound" : "Outbound")} {license} - {vehicle}");
             s_queue.Enqueue((vehicle, time, inbound, license));
         }
 
@@ -49,13 +49,34 @@ namespace TollCollectorLib
                 var baseToll = TollCalculator.CalculateToll(vehicle);
                 var peakPremium = TollCalculator.PeakTimePremium(time, inbound);
                 var toll = baseToll * peakPremium;
-                Account account = await Account.LookupAccountAsync(license);
-                account.Charge(toll);
-                s_logger.SendMessage($"Charged: {license} {toll:C}");
+                Account? account = await Account.LookupAccountAsync(license);
+                if (account != null)
+                {
+                    account.Charge(toll);
+                    s_logger?.SendMessage($"Charged: {license} {toll:C}");
+                }
+                else
+                {
+                    //var i = 42;
+                    //Index j = ^9;
+                    //Range r = j..4;
+                    //var w = license[j];
+                    //var x = license[r];
+                    //var y = license[..2];
+                    //var z = license[2..];
+                    //z = license[2..^1];
+                    //var z2 = license[..];
+                    var state = license[^2..];
+                    var plate = license[..^3];
+                    var owner = Owner.LookupOwnerAsync(state, plate);
+                    var finalToll = toll + 2.00m;
+                    s_logger?.SendMessage($"Send bill: {license} {finalToll:C}");
+                }
+
             }
             catch (Exception ex)
             {
-                s_logger.SendMessage(ex.Message, LogLevel.Error);
+                s_logger?.SendMessage(ex.Message, LogLevel.Error);
             }
         }
     }

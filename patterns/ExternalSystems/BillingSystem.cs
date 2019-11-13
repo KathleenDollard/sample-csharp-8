@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace TollCollectorLib
@@ -23,13 +24,16 @@ namespace TollCollectorLib
                 => // Dummy charge action
                 Console.WriteLine($"Charging toll: {toll}");
 
-            public static async Task<Account> LookupAccountAsync(string license)
+            public static async Task<Account?> LookupAccountAsync(string license)
             {
                 await Task.Delay(300);
-                Account account = SomeAccounts
+                Account? account = SomeAccounts
                                       .Where(a => a.License == license)
                                       .SingleOrDefault() 
                                       ?? null;
+                var y = default(string);
+                y ??= "fred";
+                y ??= "fred";
                 // Hack above is to force the possibility of null. 
                 // SingleOrDefault seems oblivious
                 return account; 
