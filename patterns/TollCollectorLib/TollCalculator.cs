@@ -13,6 +13,40 @@ namespace TollCollectorLib
         private const decimal busBase = 5.00m;
         private const decimal deliveryTruckBase = 10.00m;
 
+        public static decimal CalculateToll6(object vehicle)
+        {
+            if (vehicle is null)
+            {
+                throw new ArgumentNullException(nameof(vehicle));
+            }
+            var c = vehicle as Car;
+            if (c != null)
+            {
+                if (c.Passengers == 0)
+                {
+                    return carBase + 0.5m;
+                }
+                if (c.Passengers == 1)
+                {
+                    return carBase;
+                }
+                if (c.Passengers == 2)
+                {
+                    return carBase - 0.5m;
+                }
+                return carBase - 1.00m;
+            }
+            else
+            {
+                //
+                // I am going to go be a truckstop waitress now, I just can't
+                // do them all
+                //
+                return int.MinValue;
+            }
+
+        }
+
         public static decimal CalculateToll(object vehicle)
         {
             if (vehicle is null)
