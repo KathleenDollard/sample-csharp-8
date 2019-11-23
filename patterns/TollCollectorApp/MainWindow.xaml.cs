@@ -23,6 +23,16 @@ namespace TollCollectorApp
 
             _random = new Random();
             TollSystem.Initialize(this);
+
+            _ = ChargeTollAsync();
+        }
+
+        private static async Task ChargeTollAsync()
+        {
+            await foreach (var t in TollSystem.GetTollEventsAsync())
+            {
+                await TollSystem.ChargeTollAsync(t.vehicle, t.time, t.inbound, t.license);
+            }
         }
 
         private string GenerateLicense()
